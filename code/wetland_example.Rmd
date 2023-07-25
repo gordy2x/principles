@@ -1,0 +1,242 @@
+---
+title: "Wetland richness example: Four principles for improved statistical ecology: "
+output: html_document
+---
+
+## Principle 1. First, define a focused research question, then plan sampling and analysis to answer it
+
+### 1A – Define your research question
+
+#### FINER
+
+ - **Feasible** - There is enough funding and expertise to conduct a four year glasshouse experiment with about 90 mesocosms. 
+
+ - **Interesting** -   Swamp-woodland communities are likely sensitive to climatic moisture and fire history (Keith et al., 2010) and recent longwall underground coal extraction has caused subsidence, diminishing water resources (Mason et al., 2021). 
+ 
+ - **Novel** -   Current evidence is from observational studies, no controlled empirical manipulations have been done, and this would add substantially to the evidence base.
+ 
+ - **Ethical** - Extraction of small mesocosms is unlikely to have a negative effect on the health of the ecosystem.
+ 
+ - **Relevant** - Dendrobium Mine in the Sydney basin has applied for permission to expand, which would under-mine further swamps.
+
+#### Predictions
+
+- Vegetation with less available water will have greater reduction in richness over time than vegetation with more water. 
+- Lower water will compound burning effects (interaction).
+
+Note - We will assume burnt vegetation will have greater reduction in richness than unburnt vegetation, and this is not of interest.
+
+
+#### PICO
+
+- **Population** - Upland swamp plant communities of the Sydney Basin, Australia
+- **Intervention** - Two interventions: water level (low, medium, high) and fire (yes, no), factorial.
+- **Comparison** - The control group is high water unburnt mesocosms, as this is thought to reflect the natural (unburnt) state of the swamps, though differences between all treatments are of interest.
+- **Outcome** - Richness (# species)
+
+
+### 1B – Match data collection to research aims
+
+The sampling is summarised in Figure 1. Briefly
+
+#### Field Sampling 
+
+1. Researchers collected 31 mesocosms comprising above-ground and root biomass along with soil material from both cyproid heath and tee-tree thicket vegetation communities in each of four upland swamps in the Sydney Basin.
+2. Above-ground vegetation was clipped to approximately 10% of the original biomass and mesocosms were bagged and then transported to the glasshouse. Mesocosms from each site were allowed to acclimatise for a 28 days, with regular watering prior to treatment allocation. 
+
+#### Manipulative Experiment
+
+1. Mesocosms were randomised to high, medium and low water treatments, and burn/unburnt. 
+
+To do this we need the `randomizr` package, and a list of mesocosms. 
+
+```{r randomisation, message=FALSE, warning=FALSE}
+library(randomizr)
+mesocosms <- read.csv("../data/mesocosms.csv") 
+head(mesocosms)
+
+```
+
+The simplest way to randomize is complete random assignment, where each mesocosm is allocated to each treatment with some probability. If we want equal probabilities for each treatment then with 6 treatments (3 water x 2 fire) we use `prob_each = rep(1/6,6)`)
+
+
+```{r}
+mesocosms$treatment = complete_ra(N = nrow(mesocosms), prob_each = rep(1/6,6),
+                                  conditions = c("H_u", "M_u", "L_u", "H_b", "M_b", "L_b"))
+head(mesocosms)
+```
+We can check how many mesocosms are in each treatment.
+```{r}
+table(mesocosms$treatment)
+```
+
+2. For the first 20 months water levels of treatment tubs were maintained to 70, 155 and 240 mm below the mesocosm surface for the high, medium and low water levels, respectively.
+3. A single fire event was simulated on mesocosms allocated to the burnt treatment by sequentially clipping, heating and applying smoked water to these mesocosms.
+4. Richness was measured at regular points throughout.
+
+### 1C – Plan analysis and consider registration
+
+
+#### Model
+
+- (Generalised) linear mixed model with richness as outcome, fixed effects for swamp and vegetation type to control for these, and random effect for mesocosm (to account for repeated measures), as well as fixed effects for Time (categorical), water (low, medium, high), and fire (burnt, unburnt).
+- Outcome type (Normal, log transfomed etc.), and relationship type (linear, quadratic) to be determined with reference to residual plots.
+
+
+#### Primary Effects of interest (with confidence intervals)
+
+- Effect of **water level** on change in richness from 2 years (immediately prior to burning) to 4 years (conclusion of experiment) un unburnt mesocosms, controlling for swamp and vegetation type.  
+- Effect of **burning** on difference in richness between **water levels**  at 4 years (conclusion of experiment), controlling for swamp, vegetation type and water treatment. 
+
+
+#### Multiple testing
+
+- Primary effects p-values and confidence intervals will be adjusted for multiple testing using the multivariate t distribution (`method = "mvt"` in `emmeans`)
+
+
+## Principle 2. Develop a model that accounts for the distribution and dependence of your data
+
+### 2A – Model dependence
+
+We have 3 sources of dependence
+
+1. Mesocosms come from four swamps, and different swamps may have different richness, for this we will include a fixed effect of swamp.
+2. Mesocosms are from two vegetation communities (tea tree thicket and Cyperoid heath), and these communities may differ in richness, so we will include a fixed effect for vegetation community
+3. Mesocosms will be measured multiple times, and these repeated measurements will be correlated, we will include a random intercept for mesocosm.
+
+
+#### Read in richness data
+
+```{r}
+rich_data <- read.csv("../data/rich_data.csv")  
+```
+
+#### Mixed model
+
+```{r}
+library(lme4) 
+rich_live <- lmer(richness ~ swamp + veg +  
+                    factor(days)*water_treatment + 
+                    factor(days)*fire_treatment + 
+                    water_treatment*fire_treatment  + 
+                    (1 | Mesocosm),
+                  data = rich_data)
+```
+The warning about rank deficiency means is expected, it is because we don't have measurements of burnt swamps prior to the burning treatment at 2 years.
+
+### 2B – Check assumptions
+
+#### Residual v.s. fitted plot (marginal)
+
+Note -  `re.form = NA` gives marginal residuals.
+
+```{r out.width = "50%", out.height = "50%"}
+plot(rich_live, resid(. ) ~ predict(., re.form = NA))
+```
+
+#### Scale-location plot
+
+```{r out.width = "50%", out.height = "50%"}
+plot(rich_live, sqrt(abs(resid(. ))) ~ predict(., re.form = NA))
+
+```
+
+Assumptions of linearity and constant variance met. 
+
+### 3A – Replace statistical significance with ecological relevance by emphasising effect sizes
+
+Start by plotting model estimates. The easiest way is to use `emmip` from `emmeans`.
+
+```{r message=FALSE, warning=FALSE}
+library(emmeans)
+emmeans_plot = emmip(rich_live,  ~ water_treatment ~ days | fire_treatment , 
+                     CIs = TRUE) # always include confidence intervals
+emmeans_plot
+```
+
+We can take the data from the previous plot and use it to make a prettier plot. 
+
+```{r}
+library(ggplot2) 
+library(dplyr)
+
+pos = position_dodge(width=70) # dodge water
+
+plot_df <- emmeans_plot$data %>% 
+  mutate(fire_treatment = relevel(fire_treatment,"ub"))
+ 
+ggplot(plot_df, aes(days, yvar, color = water_treatment, 
+             shape = fire_treatment, linetype = fire_treatment))+
+  geom_point( position = pos, size = 2 ) +
+  geom_path( position = pos , size = 1) +
+  geom_errorbar(aes(ymin = LCL, ymax = UCL), position = pos, 
+                alpha = 0.5, width = 0, size = 2) +
+  theme_classic() +
+  xlim(0,1500) +
+  xlab("Time since experiment commenced (days)") + 
+  ylab("Mean species richness (+/- 95% CI) per mesocosm") +
+  theme(legend.position = "none",
+        axis.text = element_text( size = 12), 
+        axis.title = element_text( size = 14)) 
+```
+
+Next we calculate the desired effects and their confidence intervals, again using emmeans.
+
+Estimate the marginal means for all water treatments, at just the times of interest 444 and 1261, for unburnt mesocosms using the emmeans function.
+
+```{r}
+# water by time changes
+em_water <- emmeans(rich_live,  ~ water_treatment + days , 
+                    at = list(days = c(587,1261), fire_treatment = "ub"))
+```
+
+Calculate all pairwise interactions between the two.
+
+```{r}
+water_changes <- contrast(em_water, interaction = "pairwise", adjust = "mvt")
+water_changes
+```
+
+Also estimate the means for all water and fire treatment combinations at the last time point (1261).
+
+```{r}
+# fire by water changes
+em_fire <- emmeans(rich_live,  ~ water_treatment + fire_treatment , 
+                   at = list(days = c(1261)))
+```
+
+
+Again calculate all pairwise interactions.
+
+```{r}
+fire_changes <- contrast(em_fire, interaction = "pairwise", adjust = "mvt")
+fire_changes
+```
+
+
+Each of the above will answer my primary questions, however we would like to control for multiple testing jointly across these, for this we can use the `rbind` function.
+
+
+```{r}
+# combine these for multiple testing adjustment
+combined_effects <- rbind(water_changes, fire_changes, adjust = "mvt")
+
+confint(combined_effects)
+#summary(combined_effects) # for p-values
+
+```
+
+
+#### Results
+
+Between 22 and 42 months, species richness reduced by 1.635 (95% CI: 0.933–2.337; p <0.001) more in low-water mesocosms than high-water and 1.344 (95% CI: 0.640–2.048; p <0.001) more in low-water than medium-water mesocosms, with no differences detected in changes between the medium and high-water mesocosms (estimate = 0.291; 95% CI: −0.414 to 0.995,p = 0.759).
+
+
+Contrasts showed very strong evidence of convergence between medium and low water availability after the fire treatment (burnt mesocosms) compared with the unburnt treatment level (t2044 =−4.829, p <0.001; estimate = −1.160; 95% CI: −1.782 to −0.539), and divergence between high and medium water availability after fire (t2044 =5.693, p <0.001; estimate = 1.376; 95% CI: 0.751–2.001) compared with the unburnt treatment level. There was no evidence of change in the difference between richness for high and low water availability with fire (t2044 =0.898, p <0.854; estimate = 0.216; 95% CI: −0.406 to 0.838). 
+
+#### References
+
+Keith,  D.  A.,  Rodoreda,  S.,  &  Bedward,  M.  (2010).  Decadal  change  in wetland-woodland  boundaries  during  the  late  20th  century  re-flects climatic trends. Global Change Biology, 16,  2300– 2306.
+
+Mason, T. J., Krogh, M., Popovic, G. C., Glamore, W., & Keith, D. A. (2021). Persistent effects of underground longwall coal mining on freshwa-ter wetland hydrology. Science of the Total Environment, 772, 144772.
+
