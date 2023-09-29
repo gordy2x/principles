@@ -1,0 +1,16 @@
+carotenoids.csv contains 14 variables:
+
+YEAR - numeric, year of sampling
+BOX - string, nestbox ID (nestbox of rearing if cross-fostering was present)
+BOX_OR - string, nestbox of genetic origin, same as BOX if no cross-fostering
+RING - string, individual ID of each bird
+BROOD_SIZE - numeric, number of nestlings in the brood
+OH - numeric, observed hatching date (in April-days)
+SEX - M for males, F for females
+MASS_14 - numeric, individual body weight in grams
+R_TARS_14 - numeric, individual tarsus length in mm
+BRIGHTNESS - breast feathers brightness (unitless)
+UV_CHROMA - saturation of breast feathers in the UV range (unitless)
+H_THETA - hue expressed as angle in the RGB colour plane
+H_PHI - UV saturation expressed as angle with z axis of colour space
+R_ACHIEVED - realised overall saturation of colour (unitless)
