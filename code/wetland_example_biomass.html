@@ -371,17 +371,17 @@ ecology: a worked example for species biomeass in wetland mesocosms</h1>
 which may affect nearby swamp communities. The researchers wanted to
 examine how differing water availability affected swamp plant
 communities, both alone and in combination with a fire disturbance. For
-this study, researchers planned to collect from multiple swamps, then
-randomise them to water and fire treatments in a glasshouse to infer if
-water availability causes changes in biomass. Mesocosms, for the purpose
-of this study, are a column of soil and plants, collected by hammering
-PVC pipe (diameter of 150 mm and a depth of 250 mm) to ground level and
-extracted with trenching shovels. They would then placed in tubs in a
-glasshouse, and tub water levels were manipulated to simulate different
-levels of groundwater availability. A fire event was to be simulated by
-sequentially applying biomass removal (clipping), heat and smoke to half
-of the mesocosms in each water treatment after 20 months (see Figure 1
-main manuscript).</p>
+this study, researchers planned to collect mesocosms from multiple
+swamps, then randomise them to water and fire treatments in a glasshouse
+to infer if water availability causes changes in biomass. Mesocosms, for
+the purpose of this study, are a column of soil and plants, collected by
+hammering PVC pipe (diameter of 150 mm and a depth of 250 mm) to ground
+level and extracted with trenching shovels. They would then placed in
+tubs in a glasshouse, and tub water levels were manipulated to simulate
+different levels of groundwater availability. A fire event was to be
+simulated by sequentially applying biomass removal (clipping), heat and
+smoke to half of the mesocosms in each water treatment after 20 months
+(see Figure 1 main manuscript).</p>
 <p>The example below is a simplified portion of the full experiment and
 analysis in (Mason et al., 2022)</p>
 <div id="principle-1.-first-define-a-focused-research-question-then-plan-sampling-and-analysis-to-answer-it" class="section level2">
@@ -466,7 +466,7 @@ mesocosms.</p>
 <pre class="r"><code>library(randomizr)
 mesocosms &lt;- read.csv(&quot;../data/mesocosms.csv&quot;) 
 head(mesocosms)</code></pre>
-<pre><code>##         Sod Swamp veg
+<pre><code>##    Mesocosm swamp veg
 ## 1 CAT_CH_01    CA  ch
 ## 2 CAT_CH_02    CA  ch
 ## 3 CAT_CH_03    CA  ch
@@ -480,13 +480,13 @@ water x 2 fire) we use <code>prob_each = rep(1/6,6)</code>)</p>
 <pre class="r"><code>mesocosms$treatment = complete_ra(N = nrow(mesocosms), prob_each = rep(1/6,6),
                                   conditions = c(&quot;H_u&quot;, &quot;M_u&quot;, &quot;L_u&quot;, &quot;H_b&quot;, &quot;M_b&quot;, &quot;L_b&quot;))
 head(mesocosms)</code></pre>
-<pre><code>##         Sod Swamp veg treatment
-## 1 CAT_CH_01    CA  ch       M_u
-## 2 CAT_CH_02    CA  ch       M_u
-## 3 CAT_CH_03    CA  ch       L_b
-## 4 CAT_CH_04    CA  ch       M_b
-## 5 CAT_CH_05    CA  ch       L_u
-## 6 CAT_CH_06    CA  ch       M_b</code></pre>
+<pre><code>##    Mesocosm swamp veg treatment
+## 1 CAT_CH_01    CA  ch       M_b
+## 2 CAT_CH_02    CA  ch       H_u
+## 3 CAT_CH_03    CA  ch       H_u
+## 4 CAT_CH_04    CA  ch       H_b
+## 5 CAT_CH_05    CA  ch       M_u
+## 6 CAT_CH_06    CA  ch       L_u</code></pre>
 <p>We can check how many mesocosms are in each treatment.</p>
 <pre class="r"><code>table(mesocosms$treatment)</code></pre>
 <pre><code>## 
@@ -635,6 +635,7 @@ the emmeans function.</p>
 <pre class="r"><code># water by time changes
 em_water &lt;- emmeans(bio_live,  ~ water + days , type = &quot;response&quot;,
                     at = list(days = c( 1270, 592), fire = &quot;ub&quot;))</code></pre>
+<p>Note - You may get a warning, but it can be ignored.</p>
 <p>Calculate all pairwise interactions between the two.</p>
 <pre class="r"><code>water_changes &lt;- contrast(em_water, interaction = &quot;pairwise&quot;)
 water_changes</code></pre>
@@ -677,8 +678,8 @@ cbind(summary(combined_effects)[,c(1:4,8)], confint(combined_effects)[, 7:8]) %&
   mutate_at(5, round,3)</code></pre>
 <pre><code>##   water_pairwise days_pairwise fire_pairwise ratio p.value lower.CL upper.CL
 ## 1          H / M    1270 / 592             .   1.1   0.995      0.6      2.1
-## 2          H / L    1270 / 592             .   2.2   0.011      1.1      4.2
-## 3          M / L    1270 / 592             .   2.0   0.029      1.1      3.9
+## 2          H / L    1270 / 592             .   2.2   0.012      1.1      4.2
+## 3          M / L    1270 / 592             .   2.0   0.030      1.1      3.9
 ## 4          H / M             .        b / ub   1.3   0.716      0.7      2.5
 ## 5          H / L             .        b / ub   1.2   0.933      0.6      2.3
 ## 6          M / L             .        b / ub   0.9   0.986      0.5      1.7</code></pre>
@@ -694,7 +695,7 @@ low and medium water mesocosms doubled (relative change = 2.0; 95% CI:
 1.1 – 3.9), but there was no evidence of differences in biomass changes
 between high and medium water mesocosms (relative change = 1.1; 95% CI:
 0.6 – 2.1). We did not find any evidence of an interaction between fire
-and water.</p>
+and water treatments.</p>
 </div>
 <div id="discussion" class="section level4">
 <h4>Discussion</h4>

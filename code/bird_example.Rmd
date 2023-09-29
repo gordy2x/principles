@@ -65,7 +65,7 @@ In years where cross-fostering was used in nests, the nests in a cross-fostered 
 
 #### Primary Effects of interest (with confidence intervals)
 
-- Correlation of **hatching date** with the measured colour variables, , controlling for nuissance variables and random effects.
+- Correlation of **hatching date** with the measured colour variables, controlling for nuissance variables and random effects.
 - Effect of **sex** on the direction of the relationship between colour and **hatching date** (interaction), controlling for nuissance variables and random effects. 
 
 

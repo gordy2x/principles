@@ -81,7 +81,7 @@ The example below is a simplified portion of the full analysis in [@janas2019].
 
 ## 1B -- Match data collection to research aims
 
-The sampling is summarised in @fig-design2. `r getwd()`
+The sampling is summarised in @fig-design2.
 
 ![Schematic illustration of the blue tit study from Gotland.](../figures/Fig1-02.png){#fig-design2}
 
@@ -90,9 +90,6 @@ The sampling is summarised in @fig-design2. `r getwd()`
 -   Nestlings were sampled in all identified broods - all nestlings in each nest were sampled for 3-5 breast feathers 14 days after hatching, which were then mounted on blackened paper for further measurements.
 -   Natural distribution of hatching dates led to the majority of nests being sampled within medium hatching dates.
 
-### Manipulative Experiment
-
-In years where cross-fostering was used in nests, the nests in a cross-fostered dyad were matched by hatching date (±1 day) and clutch size (±1 egg). In such years all nests that could be matched in pairs were used, with matching occuring between randomly selected nests.
 
 ## 1C -- Plan analysis and consider registration
 
@@ -264,7 +261,7 @@ ci_chroma1 <- confint(uv_chroma1)
 ci_bright1 <- confint(brightness1)
 ```
 
-Next we calculate the desired effects and their confidence intervals, again using emmeans.
+Next we calculate the desired effects and their confidence intervals, using emmeans.
 
 ```{r}
 em_chroma1 <- emmeans(uv_chroma1,  ~ OH, 
@@ -290,9 +287,9 @@ pairwise_bright_ci <- confint(pairwise_bright)
 
 ### Results
 
-In case of UV chroma, hatching date was positively correlated with UV colouration (slope estimate: b = `r coef(summary(uv_chroma1))["OH", "Estimate"]`, 95% CI: `r ci_chroma1["OH", "2.5 %"]` - `r ci_chroma1["OH", "97.5 %"]`, p = `r coef(summary(uv_chroma1))["OH", "Pr(>|t|)"]`). Males and females did not differ in the strength of this relationship (interaction removed from the model). Males had consistently lower UV chroma than fmales (predicted chroma at average hatching date; males: `r summary(em_chroma2)[2, "emmean"]`, 95% CI: `r summary(em_chroma2)[2, "lower.CL"]` - `r summary(em_chroma2)[2, "upper.CL"]`; females: `r summary(em_chroma2)[1, "emmean"]`, 95% CI: `r summary(em_chroma2)[1, "lower.CL"]` - `r summary(em_chroma2)[1, "upper.CL"]`).
+In case of UV chroma, hatching date was positively correlated with UV colouration (slope estimate: b = `r coef(summary(uv_chroma1))["OH", "Estimate"]`, 95% CI: `r ci_chroma1["OH", "2.5 %"]` - `r ci_chroma1["OH", "97.5 %"]`, p = `r coef(summary(uv_chroma1))["OH", "Pr(>|t|)"]`). Males and females did not differ in the strength of this relationship (interaction removed from the model). Males had consistently lower UV chroma than females (predicted chroma at average hatching date; males: `r summary(em_chroma2)[2, "emmean"]`, 95% CI: `r summary(em_chroma2)[2, "lower.CL"]` - `r summary(em_chroma2)[2, "upper.CL"]`; females: `r summary(em_chroma2)[1, "emmean"]`, 95% CI: `r summary(em_chroma2)[1, "lower.CL"]` - `r summary(em_chroma2)[1, "upper.CL"]`).
 
-Brighntess of feathers decreased with hatching date and the rate of decrease was different in males and females (males: b = `r summary(et_bright1$emtrends)[2, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[2, "lower.CL"]` - `r summary(et_bright1$emtrends)[2, "upper.CL"]`; females: b = `r summary(et_bright1$emtrends)[1, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[1, "lower.CL"]` - `r summary(et_bright1$emtrends)[1, "upper.CL"]`; sex difference `r summary(et_bright_ci)[1, "estimate"]`, 95% CI: `r summary(et_bright_ci)[1, "lower.CL"]` - `r summary(et_bright_ci)[1, "upper.CL"]`, p = `r summary(et_bright1$contrasts)[1, "p.value"]`; @fig-brightpred). Translating these estimates to predicted brightness levels: female feather brightness is predicted to drop between the beginning and end of the season (marginal predictions for April-days 45 and 65) by `r pairwise_bright_ci[1, "estimate"]`, 95% CI: `r pairwise_bright_ci[1, "lower.CL"]` - `r pairwise_bright_ci[1, "upper.CL"]` (p = `r summary(pairwise_bright)[1, "p.value"]`); in males the drop in brightness would be `r pairwise_bright_ci[6, "estimate"]`, 95% CI: `r pairwise_bright_ci[6, "lower.CL"]` - `r pairwise_bright_ci[6, "upper.CL"]` (p = `r summary(pairwise_bright)[6, "p.value"]`).
+Brightness of feathers decreased with hatching date and the rate of decrease was different in males and females (males: b = `r summary(et_bright1$emtrends)[2, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[2, "lower.CL"]` - `r summary(et_bright1$emtrends)[2, "upper.CL"]`; females: b = `r summary(et_bright1$emtrends)[1, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[1, "lower.CL"]` - `r summary(et_bright1$emtrends)[1, "upper.CL"]`; sex difference `r summary(et_bright_ci)[1, "estimate"]`, 95% CI: `r summary(et_bright_ci)[1, "lower.CL"]` - `r summary(et_bright_ci)[1, "upper.CL"]`, p = `r summary(et_bright1$contrasts)[1, "p.value"]`; @fig-brightpred). Translating these estimates to predicted brightness levels: female feather brightness is predicted to drop between the beginning and end of the season (marginal predictions for April-days 45 and 65) by `r pairwise_bright_ci[1, "estimate"]`, 95% CI: `r pairwise_bright_ci[1, "lower.CL"]` - `r pairwise_bright_ci[1, "upper.CL"]` (p = `r summary(pairwise_bright)[1, "p.value"]`); in males the drop in brightness would be `r pairwise_bright_ci[6, "estimate"]`, 95% CI: `r pairwise_bright_ci[6, "lower.CL"]` - `r pairwise_bright_ci[6, "upper.CL"]` (p = `r summary(pairwise_bright)[6, "p.value"]`).
 
 ### Discussion
 

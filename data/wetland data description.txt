@@ -1,0 +1,14 @@
+mesocosms.csv contains three variables
+
+Mesocosm :  mesocosm idenifier
+swamp : swamp identifier 
+veg - vegetation type, tt - Ti-tree thicket, ch - Cyperoid heath
+
+wetland_biomass.csv contains 8 variables
+
+Mesocosm :  mesocosm idenifier
+swamp : swamp identifier 
+days : days since treatment began
+veg - vegetation type, tt - Ti-tree thicket, ch - Cyperoid heath
+water - water treatment high (H), medium (M) or low (L)
+biomass - above ground biomass in grams
