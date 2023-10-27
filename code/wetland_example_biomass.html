@@ -521,17 +521,17 @@ water x 2 fire) we use <code>prob_each = rep(1/6,6)</code>)</li>
                                   conditions = c(&quot;H_u&quot;, &quot;M_u&quot;, &quot;L_u&quot;, &quot;H_b&quot;, &quot;M_b&quot;, &quot;L_b&quot;))
 head(mesocosms)</code></pre>
 <pre><code>##    Mesocosm swamp veg treatment
-## 1 CAT_CH_01    CA  ch       M_b
-## 2 CAT_CH_02    CA  ch       M_b
-## 3 CAT_CH_03    CA  ch       L_b
-## 4 CAT_CH_04    CA  ch       L_b
-## 5 CAT_CH_05    CA  ch       M_b
-## 6 CAT_CH_06    CA  ch       H_b</code></pre>
+## 1 CAT_CH_01    CA  ch       L_u
+## 2 CAT_CH_02    CA  ch       H_u
+## 3 CAT_CH_03    CA  ch       M_b
+## 4 CAT_CH_04    CA  ch       M_b
+## 5 CAT_CH_05    CA  ch       L_b
+## 6 CAT_CH_06    CA  ch       L_b</code></pre>
 <p>We can check how many mesocosms are in each treatment.</p>
 <pre class="r"><code>table(mesocosms$treatment)</code></pre>
 <pre><code>## 
 ## H_u M_u L_u H_b M_b L_b 
-##  41  41  42  41  41  42</code></pre>
+##  41  42  41  41  41  42</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>For the duration of the experiment, water levels of treatment tubs
 were maintained at 70, 155 and 240 mm below the mesocosm surface for the
@@ -717,7 +717,7 @@ cbind(summary(combined_effects)[,c(1:4,8)], confint(combined_effects)[, 7:8]) %&
 <pre><code>##   water_pairwise days_pairwise fire_pairwise ratio p.value lower.CL upper.CL
 ## 1          H / M    1270 / 592             .   1.1   0.995      0.6      2.1
 ## 2          H / L    1270 / 592             .   2.2   0.011      1.1      4.2
-## 3          M / L    1270 / 592             .   2.0   0.030      1.1      3.9
+## 3          M / L    1270 / 592             .   2.0   0.029      1.1      3.9
 ## 4          H / M             .        b / ub   1.3   0.716      0.7      2.5
 ## 5          H / L             .        b / ub   1.2   0.933      0.6      2.3
 ## 6          M / L             .        b / ub   0.9   0.986      0.5      1.7</code></pre>
