@@ -1,6 +1,5 @@
----
-title: Four principles for improved statistical ecology worked examples
----
+
+## Four principles for improved statistical ecology worked examples
 
 Two worked examples demonstrating how to apply the four principles for improved statistical ecology to 
 
