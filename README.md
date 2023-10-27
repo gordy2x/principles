@@ -14,7 +14,7 @@ Two worked examples demonstrating how to apply the four principles for improved 
 2. An observational study to examine the relationship of hatching date with the expression of carotenoid-based colouration in Blue Tit nestlings.
 
   - QMD format - [code/bird_example.qmd](code/bird_example.qmd)
-  - RMarkdown format - [code/Rmd_files/bird_example.Rmd](code/Rmd_files/bird_example.Rmd)
+  - RMarkdown format - [code/Rmd_files/bird_example.Rmd](code/Rmd_files/bird_example.rmd)
   - HTML output - [code/bird_example.html](code/bird_example.html)
   - PDF output - [code/Rmd_files/bird_example.pdf](code/Rmd_files/bird_example.pdf)
  
