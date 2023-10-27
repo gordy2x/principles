@@ -11,7 +11,7 @@ Two worked examples demonstrating how to apply the four principles for improved 
   - PDF output - [code/Rmd_files/wetland_example_biomass.pdf](code/Rmd_files/wetland_example_biomass.pdf)
  
 
-2. And observation study to examine the relationship of hatching date with the expression of carotenoid-based colouration in Blue Tit nestlings.
+2. And observational study to examine the relationship of hatching date with the expression of carotenoid-based colouration in Blue Tit nestlings.
 
   - QMD format - [code/bird_example.Qmd](code/bird_example.Qmd)
   - RMarkdown format - [code/Rmd_files/bird_example.Rmd](code/Rmd_files/bird_example.Rmd)
