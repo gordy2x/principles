@@ -19,12 +19,11 @@ crossref:
   tbl-prefix: Tab.    # (default is "Table")
 editor_options: 
   chunk_output_type: console
-# bibliography: refs_birdex.bib
 bibliography: refs_wetlandex.bib
 csl: heredity.csl
 ---
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 #| output: false
 #| warning: false
 #| label: packages
@@ -101,7 +100,7 @@ To do this we need the `randomizr` package, and a list of mesocosms.
 
 ```{r randomisation, message=FALSE, warning=FALSE}
 
-mesocosms <- read.csv("../data/mesocosms.csv") 
+mesocosms <- read.csv(here("data","mesocosms.csv")) 
 head(mesocosms)
 
 ```
@@ -153,7 +152,7 @@ We have three sources of dependence
 ### Read in biomass data
 
 ```{r message=FALSE, warning=FALSE}
-bio_data <- read.csv("../data/wetland_biomass.csv") %>% 
+bio_data <- read.csv(here("data","wetland_biomass.csv")) %>% 
   mutate(water = factor(water, levels = c("H","M","L")))
 ```
 
@@ -203,6 +202,9 @@ We can take the data from the previous plot and use them to make a prettier plot
 
 pos = position_dodge(width=70) # dodge water
 
+#colour blind friendly palette
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
 plot_df <- emmeans_plot$data %>% 
   mutate(fire = relevel(fire,"ub"))
  
@@ -215,6 +217,7 @@ ggplot(plot_df, aes(days, yvar, color = water, shape = fire, linetype = fire),
   xlim(0,1500) +
   xlab("Time since experiment commenced (days)") + 
   ylab("Mean biomass (+/- 95% CI) per mesocosm (g)") +
+  scale_colour_manual(values=cbPalette) + 
   theme(legend.position = "none",
         axis.text = element_text( size = 12), 
         axis.title = element_text( size = 14)) 

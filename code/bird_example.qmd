@@ -1,24 +1,24 @@
 ---
 title: "Four principles for improved statistical ecology: a worked example of correlational animal data from a long-term monitoring project"
 date: "`r Sys.Date()`"
-format: pdf
-  # html:
-  #   toc: true
-  #   toc-location: left
-  #   toc-depth: 2
-  #   theme: simplex
-  #   embed-resources: true
-  #   code-fold: show
-  #   code-tools: true
-  #   number-sections: false
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-depth: 2
+    theme: simplex
+    embed-resources: true
+    code-fold: show
+    code-tools: true
+    number-sections: false
 crossref: 
   fig-title: Figure     # (default is "Figure")
   tbl-title: Table     # (default is "Table")
   title-delim: —     # (default is ":")
   fig-prefix: Fig.   # (default is "Figure")
   tbl-prefix: Tab.    # (default is "Table")
-# editor_options: 
-#   chunk_output_type: console
+editor_options: 
+  chunk_output_type: console
 bibliography: refs_birdex.bib
 csl: heredity.csl
 ---
