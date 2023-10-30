@@ -1,6 +1,7 @@
 ---
-title: "Four principles for improved statistical ecology: a worked example for species biomeass in wetland mesocosms"
-output: html_document
+title: 'Four principles for improved statistical ecology: a worked example for species
+  biomeass in wetland mesocosms'
+output: pdf_document
 ---
 
 Underground mining is known to disrupt surface and groundwater flows which may affect nearby swamp communities. The researchers wanted to examine how differing water availability affected swamp plant communities, both alone and in combination with a fire disturbance. For this study, researchers planned to collect mesocosms from multiple swamps, then randomise them to water and fire treatments in a glasshouse to infer if water availability causes changes in biomass. Mesocosms, for the purpose of this study, are a column of soil and plants, collected by hammering PVC pipe (diameter of 150 mm and a depth of 250 mm) to ground level and extracted with trenching shovels. They would then placed in tubs in a glasshouse, and tub water levels were manipulated to simulate different levels of groundwater availability. A fire event was to be simulated by sequentially applying biomass removal (clipping), heat and smoke to half of the mesocosms in each water treatment after 20 months (see Figure 1 main manuscript).
@@ -57,7 +58,7 @@ To do this we need the `randomizr` package, and a list of mesocosms.
 
 ```{r randomisation, message=FALSE, warning=FALSE}
 library(randomizr)
-mesocosms <- read.csv("../data/mesocosms.csv") 
+mesocosms <- read.csv("../../data/mesocosms.csv") 
 head(mesocosms)
 
 ```
@@ -115,7 +116,7 @@ We have three sources of dependence
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
-bio_data <- read.csv("../data/wetland_biomass.csv") %>% 
+bio_data <- read.csv("../../data/wetland_biomass.csv") %>% 
   mutate(water = factor(water, levels = c("H","M","L")))
 ```
 
@@ -168,6 +169,9 @@ library(dplyr)
 
 pos = position_dodge(width=70) # dodge water
 
+#colour blind friendly palette
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
 plot_df <- emmeans_plot$data %>% 
   mutate(fire = relevel(fire,"ub"))
  
@@ -180,6 +184,7 @@ ggplot(plot_df, aes(days, yvar, color = water, shape = fire, linetype = fire),
   xlim(0,1500) +
   xlab("Time since experiment commenced (days)") + 
   ylab("Mean biomass (+/- 95% CI) per mesocosm (g)") +
+  scale_colour_manual(values=cbPalette) + 
   theme(legend.position = "none",
         axis.text = element_text( size = 12), 
         axis.title = element_text( size = 14)) 

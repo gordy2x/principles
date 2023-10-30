@@ -25,7 +25,7 @@ csl: heredity.csl
 
 Setting up the workspace.
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 #| output: false
 #| warning: false
 #| label: packages
@@ -290,7 +290,7 @@ pairwise_bright_ci <- confint(pairwise_bright)
 
 In case of UV chroma, hatching date was positively correlated with UV colouration (slope estimate: b = `r coef(summary(uv_chroma1))["OH", "Estimate"]`, 95% CI: `r ci_chroma1["OH", "2.5 %"]` - `r ci_chroma1["OH", "97.5 %"]`, p = `r coef(summary(uv_chroma1))["OH", "Pr(>|t|)"]`). Males and females did not differ in the strength of this relationship (interaction removed from the model). Males had consistently lower UV chroma than females (predicted chroma at average hatching date; males: `r summary(em_chroma2)[2, "emmean"]`, 95% CI: `r summary(em_chroma2)[2, "lower.CL"]` - `r summary(em_chroma2)[2, "upper.CL"]`; females: `r summary(em_chroma2)[1, "emmean"]`, 95% CI: `r summary(em_chroma2)[1, "lower.CL"]` - `r summary(em_chroma2)[1, "upper.CL"]`).
 
-Brightness of feathers decreased with hatching date and the rate of decrease was different in males and females (males: b = `r summary(et_bright1$emtrends)[2, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[2, "lower.CL"]` - `r summary(et_bright1$emtrends)[2, "upper.CL"]`; females: b = `r summary(et_bright1$emtrends)[1, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[1, "lower.CL"]` - `r summary(et_bright1$emtrends)[1, "upper.CL"]`; sex difference `r summary(et_bright_ci)[1, "estimate"]`, 95% CI: `r summary(et_bright_ci)[1, "lower.CL"]` - `r summary(et_bright_ci)[1, "upper.CL"]`, p = `r summary(et_bright1$contrasts)[1, "p.value"]`; @fig-brightpred). Translating these estimates to predicted brightness levels: female feather brightness is predicted to drop between the beginning and end of the season (marginal predictions for April-days 45 and 65) by `r pairwise_bright_ci[1, "estimate"]`, 95% CI: `r pairwise_bright_ci[1, "lower.CL"]` - `r pairwise_bright_ci[1, "upper.CL"]` (p = `r summary(pairwise_bright)[1, "p.value"]`); in males the drop in brightness would be `r pairwise_bright_ci[6, "estimate"]`, 95% CI: `r pairwise_bright_ci[6, "lower.CL"]` - `r pairwise_bright_ci[6, "upper.CL"]` (p = `r summary(pairwise_bright)[6, "p.value"]`).
+Brightness of feathers decreased with hatching date and the rate of decrease was different in males and females (males: b = `r summary(et_bright1$emtrends)[2, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[2, "lower.CL"]` - `r summary(et_bright1$emtrends)[2, "upper.CL"]`; females: b = `r summary(et_bright1$emtrends)[1, "OH.trend"]`, 95% CI: `r summary(et_bright1$emtrends)[1, "lower.CL"]` - `r summary(et_bright1$emtrends)[1, "upper.CL"]`; sex difference `r et_bright_ci[1, "estimate"]`, 95% CI: `r et_bright_ci[1, "lower.CL"]` - `r et_bright_ci[1, "upper.CL"]`, p = `r summary(et_bright1$contrasts)[1, "p.value"]`; @fig-brightpred). Translating these estimates to predicted brightness levels: female feather brightness is predicted to drop between the beginning and end of the season (marginal predictions for April-days 45 and 65) by `r pairwise_bright_ci[1, "estimate"]`, 95% CI: `r pairwise_bright_ci[1, "lower.CL"]` - `r pairwise_bright_ci[1, "upper.CL"]` (p = `r summary(pairwise_bright)[1, "p.value"]`); in males the drop in brightness would be `r pairwise_bright_ci[6, "estimate"]`, 95% CI: `r pairwise_bright_ci[6, "lower.CL"]` - `r pairwise_bright_ci[6, "upper.CL"]` (p = `r summary(pairwise_bright)[6, "p.value"]`).
 
 ### Discussion
 
