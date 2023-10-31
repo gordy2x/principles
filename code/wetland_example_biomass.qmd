@@ -11,6 +11,10 @@ format:
     code-fold: show
     code-tools: true
     number-sections: false
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
 crossref: 
   fig-title: Figure     # (default is "Figure")
   tbl-title: Table     # (default is "Table")
